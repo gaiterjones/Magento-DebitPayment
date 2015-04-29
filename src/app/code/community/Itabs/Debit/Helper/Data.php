@@ -37,7 +37,6 @@ class Itabs_Debit_Helper_Data extends Mage_Payment_Helper_Data
      */
     public function getDebitType()
     {
-        $type = Mage::getStoreConfig('payment/debit/debit_type');
 
         /*
          * Check if we are on a specific page in the backend view,
@@ -62,6 +61,9 @@ class Itabs_Debit_Helper_Data extends Mage_Payment_Helper_Data
             $type = $method->getData('debit_type');
         }
 
+		// if debit type empty (invalid) use config value
+		if (empty($type)) {$type = Mage::getStoreConfig('payment/debit/debit_type'); }
+		
         return $type;
     }
 

@@ -118,7 +118,18 @@ class Itabs_Debit_Model_Observer
      */
     public function encryptBankDataInAdminhtmlQuote(Varien_Event_Observer $observer)
     {
-        // Check if the payment data has already been processed
+        
+		/**
+		 * Encrypt bank data in the adminhtml
+		 *
+		 * this throws an error when min order qty or groups enabled and stops admin from saving customer
+		 * disabling the processed check will workaround it, or better to disable order and group check in module 
+		 * PETE THE BEAR - 21.04.2015
+		 */		
+		//Mage::register('debit_payment_quote_data_processed', true, true);
+		//$this->_encryptPaymentData($payment);
+		
+		// Check if the payment data has already been processed
         if (!Mage::registry('debit_payment_quote_data_processed')) {
             /* @var $payment Mage_Sales_Model_Quote_Payment */
             $payment = $observer->getEvent()->getPayment();

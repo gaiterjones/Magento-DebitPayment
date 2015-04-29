@@ -12,12 +12,12 @@
  * obtain it through the world-wide-web, please send an email
  * to license@magentocommerce.com so we can send you a copy immediately.
  *
- * @category  Itabs
+ * @category  Itabs/PAJ
  * @package   Itabs_Debit
  * @author    ITABS GmbH <info@itabs.de>
  * @copyright 2008-2014 ITABS GmbH (http://www.itabs.de)
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @version   1.1.4
+ * @version   1.0.0 (1.1.4)
  * @link      http://www.magentocommerce.com/magento-connect/debitpayment.html
  */
 ?>
@@ -52,19 +52,42 @@
         <?php endif; ?>
 
     <?php else: ?>
+		<?php $bankName = $_info->getAccountBankname(); ?>
         <?php if ($this->getDebitType() == Itabs_Debit_Helper_Data::DEBIT_TYPE_BANK): ?>
-            <?php if ($bankName = $_info->getAccountBankname()): ?>
+            <?php if ($bankName): ?>
                 <?php echo $this->__('Bank name: %s', $this->escapeHtml($bankName)) ?><br />
             <?php endif; ?>
 
             <?php echo $this->__('Bank code: %s', $this->escapeHtml($_info->getAccountBLZ())) ?><br />
-            <?php echo $this->__('Account holder: %s', $this->escapeHtml($_info->getAccountName())) ?><br />
+            <?php echo $this->__('Account holder: %s', '<span style="text-transform: capitalize;">'. $this->escapeHtml($_info->getAccountName()). '</span>') ?><br />
             <?php echo $this->__('Account number: %s', $this->escapeHtml($_info->getAccountNumber())) ?><br />
         <?php else: ?>
-            <?php echo $this->__('Account holder: %s', $this->escapeHtml($_info->getAccountName())) ?><br />
-            <?php echo $this->__('IBAN: %s', $this->escapeHtml($_info->getAccountIban())) ?><br />
-            <?php echo $this->__('SWIFT Code: %s', $this->escapeHtml($_info->getAccountSwift())) ?><br />
-            <?php if ($bankName = $_info->getAccountBankname()): ?>
+            <?php echo $this->__('Account holder: %s', '<span style="text-transform: capitalize;">'. $this->escapeHtml($_info->getAccountName()). '</span>') ?><br />
+            <?php echo $this->__('IBAN: %s', $this->escapeHtml($_info->getAccountIban())) ?>
+			<?php if($this->getMethod()->validateIBAN($this->getMethod()->getAccountIBAN())):?>
+			<span style="color: #009900;font-weight:bold;"><?php echo $this->__('VALID') ?></span><br />
+			<?php else: ?>
+			<span style="color: #cc0000;font-weight:bold;"><?php echo $this->__('NOT VALID - PLEASE CHECK!') ?></span><br />
+			<?php endif; ?>				
+            <?php
+				$_bic=$_info->getAccountSwift();
+				
+				if (empty($_bic))
+				{
+					$_bic=$this->getMethod()->getBICFromBankName($bankName);
+					
+					if ($_bic) {
+						$_bic=$_bic.' <span style="color: #009900;font-weight:bold;">'. $this->__('VALID'). '</span>';
+					} else {
+						$_bic=' <span style="color: #cc0000;font-weight:bold;">'. $this->__('NOT FOUND'). '</span>';
+					}
+				}
+				
+				echo $this->__('BIC : %s', $_bic);
+
+			?>
+			<br />
+            <?php if ($bankName): ?>
                 <?php echo $this->__('Bank name: %s', $this->escapeHtml($bankName)) ?><br />
             <?php endif; ?>
         <?php endif; ?>

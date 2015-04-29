@@ -1,20 +1,19 @@
 DebitPayment
 ============
-This extension allows shop owners to provide the payment method "DebitPayment" to their customers.
+This is a fork of DebitPayment by Rouven Alexander Rieker & Itab
 
-Build Status
-------------
-* Latest Release: [![Master Branch](https://travis-ci.org/therouv/Magento-DebitPayment.svg?branch=master)](https://travis-ci.org/therouv/Magento-DebitPayment)
-* Development Branch: [![Develop Branch](https://travis-ci.org/therouv/Magento-DebitPayment.svg?branch=develop)](https://travis-ci.org/therouv/Magento-DebitPayment)
 
-Facts
------
-- version: 1.1.4
-- extension key: DebitPayment
-- [extension on Magento Connect](http://www.magentocommerce.com/magento-connect/debitpayment.html)
-- Magento Connect 1.0 extension key: magento-community/DebitPayment
-- Magento Connect 2.0 extension key: http://connect20.magentocommerce.com/community/DebitPayment
-- [extension on GitHub](https://github.com/therouv/Magento-DebitPayment)
+Changes
+-----------
+
+
+WORKAROUND - fixed invalid DebitType causing SEPA info in admin not to be shown
+
+ADDED - Validation of IBAN in Admin
+
+ADDED - Manual lookup of BIC if not present in SEPA data
+
+
 
 Description
 -----------
@@ -60,13 +59,7 @@ To uninstall this extension you need to run the following SQL after removing the
 ```
 
 
-Support & Feature-Wishes
-------------------------
-If you have any issues or you are missing an feature with this extension, please open an issue on [GitHub](https://github.com/therouv/Magento-DebitPayment/issues). Thank you.
 
-Contribution
-------------
-Any contribution is highly appreciated. The best way to contribute code is to open a [pull request on GitHub](https://help.github.com/articles/using-pull-requests).
 
 Developer
 ---------

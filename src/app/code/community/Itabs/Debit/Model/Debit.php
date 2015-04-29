@@ -14,12 +14,12 @@
  * obtain it through the world-wide-web, please send an email
  * to license@magentocommerce.com so we can send you a copy immediately.
  *
- * @category  Itabs
+ * @category  Itabs/PAJ
  * @package   Itabs_Debit
  * @author    ITABS GmbH <info@itabs.de>
  * @copyright 2008-2014 ITABS GmbH (http://www.itabs.de)
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @version   1.1.4
+ * @version   1.0.0 (1.1.4)
  * @link      http://www.magentocommerce.com/magento-connect/debitpayment.html
  */
 /**
@@ -241,4 +241,53 @@ class Itabs_Debit_Model_Debit extends Mage_Payment_Model_Method_Abstract
 
         return $crypt;
     }
+	
+	public function validateIBAN($_iban)
+	{
+		require_once Mage::getModuleDir('', 'Itabs_Debit') . DS . 'etc'. DS . 'php-iban'. DS. 'php-iban.php';
+		
+		if(verify_iban($_iban)) { // valid IBAN
+			return true;
+		}		
+		
+		return false;
+	}
+
+	public function getBICFromBankName($_bankName)
+	{
+		require_once Mage::getModuleDir('', 'Itabs_Debit') . DS . 'etc'. DS . 'php-iban'. DS. 'php-iban.php';
+		
+		$_bic=false;
+		
+		$file = $this->getFilePath();		
+		
+		// Open file
+	    $fp = fopen($file, 'r');
+	    
+		while ($data = fgetcsv($fp, 1024, ",")) {
+			if ($data[1] == $_bankName) {
+				$_bic = $data[2];
+			}
+	    }
+		
+		return $_bic;
+	}
+
+	 /**
+     * Get the path of the file "de.csv"
+     *
+     * @return  string
+     */
+	private function getFilePath()
+	{
+		$f = dirname(__FILE__);			// Get the path of this file
+		$f = substr($f, 0, -5);			// Remove the "Model" dir
+		$f = $f.'etc/bankdata/';		// Add the "etc" dir
+		$f = $f.'de.csv';				// Add the filename
+		$f = str_replace("\\","/",$f);	// change slashes
+		
+		//echo $f; exit;
+		
+		return $f;
+	}	
 }
