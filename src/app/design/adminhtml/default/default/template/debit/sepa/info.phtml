@@ -74,7 +74,7 @@
 				
 				if (empty($_bic))
 				{
-					$_bic=$this->getMethod()->getBICFromBankName($bankName);
+					$_bic=$this->getMethod()->getBICFromIBAN($_info->getAccountIban());
 					
 					if ($_bic) {
 						$_bic=$_bic.' <span style="color: #009900;font-weight:bold;">'. $this->__('VALID'). '</span>';

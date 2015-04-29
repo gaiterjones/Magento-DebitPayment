@@ -253,10 +253,28 @@ class Itabs_Debit_Model_Debit extends Mage_Payment_Model_Method_Abstract
 		return false;
 	}
 
-	public function getBICFromBankName($_bankName)
+	public function getBICFromIBAN($_iban)
 	{
 		require_once Mage::getModuleDir('', 'Itabs_Debit') . DS . 'etc'. DS . 'php-iban'. DS. 'php-iban.php';
+		$_blz=trim(iban_get_bank_part($_iban));
+
+		$file = $this->getFilePath();		
 		
+		// Open file
+	    $fp = fopen($file, 'r');
+	    
+		while ($data = fgetcsv($fp, 1024, ",")) {
+			if ($data[0] == $_blz) {
+				$_bic = $data[2];
+			}
+	    }
+		
+		return $_bic;		
+		
+	}
+	
+	public function getBICFromBankName($_bankName)
+	{
 		$_bic=false;
 		
 		$file = $this->getFilePath();		
